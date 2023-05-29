@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Advanced Learning Project: Speech to google form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Advanced Learning Project: Speech to google form</h1>
+
+    <form method="POST" action="/transcribe" enctype="multipart/form-data">
+        <input type="file" id="audioFileInput" accept="audio/*" name="audio">
+        <button id="transcribeButton">Transcribe</button>
+    </form>
+
+    <div id="outputDiv"></div>
+
+    <script>
+    $(document).ready(function() {
+        // Handle transcribe button click
+        $('#transcribeButton').on('click', function() {
+            var fileInput = document.getElementById('audioFileInput');
+            var audioFile = fileInput.files[0];
+
+            if (audioFile) {
+                var formData = new FormData();
+                formData.append('audio', audioFile);
+
+                // Make a POST request to the server
+                $.ajax({
+                    url: '/',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        // Display the generated reply
+                        $('#outputDiv').text('Generated reply: ' + response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
